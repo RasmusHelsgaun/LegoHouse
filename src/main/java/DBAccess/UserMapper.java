@@ -18,6 +18,11 @@ import java.util.List;
  */
 public class UserMapper {
 
+    /**
+     * Inserts the User object into the SQL-database.
+     * @param user not null
+     * @throws LegoHouseException 
+     */
     public static void createUser(User user) throws LegoHouseException {
         try {
             Connection con = Connector.connection();
@@ -32,11 +37,18 @@ public class UserMapper {
             int id = ids.getInt(1);
             user.setId(id);
         }
-        catch (SQLException | ClassNotFoundException ex) {
+        catch (SQLException | IllegalAccessException | InstantiationException | ClassNotFoundException ex) {
             throw new LegoHouseException(ex.getMessage(), "index");
         }
     }
 
+    /**
+     * Retrieves a user from the database.
+     * @param email
+     * @param password
+     * @return
+     * @throws LegoHouseException 
+     */
     public static User login(String email, String password) throws LegoHouseException {
         try {
             Connection con = Connector.connection();
@@ -57,11 +69,20 @@ public class UserMapper {
                 throw new LegoHouseException("Could not validate user", "index");
             }
         }
-        catch (ClassNotFoundException | SQLException ex) {
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             throw new LegoHouseException(ex.getMessage(), "index");
         }
     }
 
+    /**
+     * Inserts an order into the databasse.
+     * @param user not nulll
+     * @param width
+     * @param length
+     * @param height
+     * @return
+     * @throws LegoHouseException 
+     */
     public static int insertOrder(User user, int width, int length, int height) throws LegoHouseException {
         try {
             Connection con = Connector.connection();
@@ -76,11 +97,17 @@ public class UserMapper {
             ids.next();
             return ids.getInt(1);
         }
-        catch (SQLException | ClassNotFoundException ex) {
+        catch (SQLException | IllegalAccessException | InstantiationException | ClassNotFoundException ex) {
             throw new LegoHouseException(ex.getMessage(), "customerpage");
         }
     }
 
+    /**
+     * Retrieves all orders from the database, which matches the given userID.
+     * @param userID 1 or higher
+     * @return list of orders.
+     * @throws LegoHouseException if no orders can be found.
+     */
     public static List<Order> personalOrders(int userID) throws LegoHouseException {
         try {
             Connection con = Connector.connection();
@@ -106,11 +133,16 @@ public class UserMapper {
                 throw new LegoHouseException("You dont have any orders", "customerpage");
             }
         }
-        catch (ClassNotFoundException | SQLException ex) {
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             throw new LegoHouseException(ex.getMessage(), "index");
         }
     }
 
+    /**
+     * Retrieves all orders from the database.
+     * @return list of orders.
+     * @throws LegoHouseException if no orders can be found.
+     */
     public static List<Order> allOrders() throws LegoHouseException {
         try {
             Connection con = Connector.connection();
@@ -135,11 +167,17 @@ public class UserMapper {
                 throw new LegoHouseException("No orders has been placed in the shop", "employeepage");
             }
         }
-        catch (ClassNotFoundException | SQLException ex) {
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             throw new LegoHouseException(ex.getMessage(), "index");
         }
     }
 
+    /**
+     * Updates the shipmentstatus of an order, and retrieves all orders.
+     * @param ordernumber 1 or higher.
+     * @return list of orders, after the status has been updated.
+     * @throws LegoHouseException 
+     */
     public static List<Order> updateStatus(int ordernumber) throws LegoHouseException {
         try {
             Connection con = Connector.connection();
@@ -163,7 +201,7 @@ public class UserMapper {
                 }
                 return allOrders;
         }
-        catch (ClassNotFoundException | SQLException ex) {
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             throw new LegoHouseException(ex.getMessage(), "index");
         }
     }
